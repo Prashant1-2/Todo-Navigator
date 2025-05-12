@@ -9,5 +9,4 @@ public class TodonavigatorApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TodonavigatorApplication.class, args);
 	}
-
 }
