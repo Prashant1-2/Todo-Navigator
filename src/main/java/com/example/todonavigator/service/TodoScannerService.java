@@ -13,7 +13,6 @@ public class TodoScannerService {
 
     private static final String[] SUPPORTED_EXTENSIONS = {".java", ".js", ".ts", ".py", ".txt"};
     private static final List<String> IGNORED_DIRS = List.of(".git", "node_modules", "build", "target");
-    private static final String TODO_PATTERN = "TODO";
 
     public List<TodoEntry> scanDirectory(String rootDir, List<String> keywords) {
         List<TodoEntry> todos = new ArrayList<>();
@@ -72,39 +71,5 @@ public class TodoScannerService {
 
         return todos;
     }
-    private List<TodoEntry> scanFile(Path filePath) {
-        List<TodoEntry> todos = new ArrayList<>();
 
-        try {
-            List<String> lines = Files.readAllLines(filePath);
-            for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-                if (line.contains(TODO_PATTERN)) {
-                    todos.add(new TodoEntry(
-                        filePath.getFileName().toString(),
-                        i + 1,
-                        line.trim()
-                    ));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return todos;
-    }
-    public List<TodoEntry> scanDirectory(String rootDir) {
-        List<TodoEntry> todos = new ArrayList<>();
-
-        try {
-            Files.walk(Paths.get(rootDir))
-                .filter(Files::isRegularFile)
-                .filter(this::isSupportedFile)
-                .forEach(filePath -> todos.addAll(scanFile(filePath)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return todos;
-    }
 }
